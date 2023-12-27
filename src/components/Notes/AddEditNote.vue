@@ -1,5 +1,5 @@
 <template>
-	<div class="card p-4 mb-5" :class="`has-background-${ bgColor }-dark`">
+	<div class="card p-4 mb-5" :class="`has-background-${bgColor}-dark`">
 		<label v-if="label" class="label has-text-white">{{ label }}</label>
 		<div class="field">
 			<div class="control">
@@ -8,7 +8,9 @@
 					@input="$emit('update:modelValue', $event.target.value)"
 					class="textarea"
 					:placeholder="placeholder"
-					ref="textareaRef" />
+					ref="textareaRef"
+					maxlength="250"
+					v-autofocus />
 			</div>
 		</div>
 
@@ -24,6 +26,7 @@
 // imports
 
 import { ref } from 'vue'
+import { vAutofocus } from '@/directives/vAutofocus'
 
 // props
 
@@ -38,11 +41,11 @@ const props = defineProps({
 	},
 	placeholder: {
 		type: String,
-		default: 'Type something...'
+		default: 'Type something...',
 	},
 	label: {
 		type: String,
-	}
+	},
 })
 
 // emits
@@ -60,4 +63,5 @@ const focusTextarea = () => {
 defineExpose({
 	focusTextarea,
 })
+
 </script>
