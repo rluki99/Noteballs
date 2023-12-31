@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { collection, getDocs } from "firebase/firestore";
+import { collection, onSnapshot } from 'firebase/firestore'
 import { db } from '@/js/firebase'
 
 export const useStoreNotes = defineStore('storeNotes', {
@@ -20,14 +20,17 @@ export const useStoreNotes = defineStore('storeNotes', {
 	},
 	actions: {
 		async getNotes() {
-			const querySnapshot = await getDocs(collection(db, "notes"));
-			querySnapshot.forEach((doc) => {
-				let note = {
-					id: doc.id,
-					content: doc.data().content
-				}
-				this.notes.push(note)
-			});
+			onSnapshot(collection(db, 'notes'), (querySnapshot) => {
+				const notes = []
+				querySnapshot.forEach((doc) => {
+					let note = {
+						id: doc.id,
+						content: doc.data().content,
+					}
+					notes.push(note)
+				})
+				this.notes = notes
+			})
 		},
 		addNote(newNoteContent) {
 			const currentDate = new Date().getTime()
@@ -40,25 +43,25 @@ export const useStoreNotes = defineStore('storeNotes', {
 			this.notes.unshift(note)
 		},
 		deleteNote(idToDelete) {
-			this.notes = this.notes.filter(note => note.id !== idToDelete)
+			this.notes = this.notes.filter((note) => note.id !== idToDelete)
 		},
 		updateNote(id, content) {
-			const index = this.notes.findIndex(note => note.id === id)
+			const index = this.notes.findIndex((note) => note.id === id)
 			this.notes[index].content = content
 		},
 	},
 	getters: {
-		getNoteContent: state => {
-			return id => {
-				return state.notes.filter(note => note.id === id)[0].content
+		getNoteContent: (state) => {
+			return (id) => {
+				return state.notes.filter((note) => note.id === id)[0].content
 			}
 		},
-		getTotalNotesCount: state => {
+		getTotalNotesCount: (state) => {
 			return state.notes.length
 		},
-		getTotalCharactersCount: state => {
+		getTotalCharactersCount: (state) => {
 			let count = 0
-			state.notes.forEach(note => {
+			state.notes.forEach((note) => {
 				count += note.content.length
 			})
 			return count
