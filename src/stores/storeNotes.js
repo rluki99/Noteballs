@@ -29,6 +29,7 @@ export const useStoreNotes = defineStore('storeNotes', {
 					let note = {
 						id: doc.id,
 						content: doc.data().content,
+						date: doc.data().date
 					}
 					notes.push(note)
 				})
