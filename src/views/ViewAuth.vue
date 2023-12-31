@@ -43,6 +43,11 @@
 // imports
 
 import { computed, ref } from 'vue'
+import { useStoreAuth } from '@/stores/storeAuth'
+
+// store
+
+const storeAuth = useStoreAuth()
 
 // register / login
 
@@ -57,26 +62,23 @@ const formTitle = computed(() => {
 // credentials
 
 const credentials = ref({
-    email: '',
-    password: ''
+	email: '',
+	password: '',
 })
 
 // submit
 
 const onSubmit = () => {
-    if(!credentials.value.email || !credentials.value.password) {
-        alert('Please enter an email and password!')
-    }
-    else {
-        if(register.value) {
-            console.log('Register user with these credentials:' , credentials.value);
-        }
-        else {
-            console.log('Login user with these credentials:' , credentials.value);
-        }
-    }
+	if (!credentials.value.email || !credentials.value.password) {
+		alert('Please enter an email and password!')
+	} else {
+		if (register.value) {
+			storeAuth.registerUser(credentials.value)
+		} else {
+			console.log('Login user with these credentials:', credentials.value)
+		}
+	}
 }
-
 </script>
 
 <style>
