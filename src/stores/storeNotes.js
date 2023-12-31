@@ -19,21 +19,25 @@ export const useStoreNotes = defineStore('storeNotes', {
 				// 	content: 'Shorter note. Lorem ipsum dolar sit',
 				// },
 			],
+			notesLoaded: false,
 		}
 	},
 	actions: {
 		async getNotes() {
+			this.notesLoaded = false
 			onSnapshot(notesCollectionQuery, (querySnapshot) => {
 				const notes = []
 				querySnapshot.forEach((doc) => {
 					let note = {
 						id: doc.id,
 						content: doc.data().content,
-						date: doc.data().date
+						date: doc.data().date,
 					}
 					notes.push(note)
 				})
+				
 				this.notes = notes
+				this.notesLoaded = true
 			})
 		},
 		async addNote(newNoteContent) {
