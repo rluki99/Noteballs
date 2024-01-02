@@ -15,7 +15,7 @@ export const useStoreAuth = defineStore('storeAuth', {
 
 			onAuthStateChanged(auth, user => {
 				if (user) {
-					console.log('user logged in', user)
+					// console.log('user logged in', user)
 					this.user.id = user.uid
 					this.user.email = user.email
 					this.router.push('/')
@@ -31,18 +31,18 @@ export const useStoreAuth = defineStore('storeAuth', {
 			createUserWithEmailAndPassword(auth, credentials.email, credentials.password)
 				.then(userCredential => {
 					const user = userCredential.user
-					console.log('user: ', user)
+					// console.log('user: ', user)
 				})
 				.catch(error => {
 					console.log('error.message: ', error.message)
 				})
 		},
 		loginUser(credentials) {
-			console.log('User logged in', credentials)
+			// console.log('User logged in', credentials)
 			signInWithEmailAndPassword(auth, credentials.email, credentials.password)
 				.then(userCredential => {
 					const user = userCredential.user
-					console.log('user: ', user)
+					// console.log('user: ', user)
 				})
 				.catch(error => {
 					console.log('error.message: ', error.message)
@@ -51,7 +51,7 @@ export const useStoreAuth = defineStore('storeAuth', {
 		logoutUser() {
 			signOut(auth)
 				.then(() => {
-					console.log('User signed out')
+					// console.log('User signed out')
 				})
 				.catch(error => {
 					console.log('error.message: ', error.message)

@@ -37,7 +37,6 @@ const router = createRouter({
 
 router.beforeEach(async (to, from) => {
     const storeAuth = useStoreAuth()
-    console.log('to', to);
 
     if(!storeAuth.user.id && to.name !== 'auth') {
         return { name: 'auth'}
