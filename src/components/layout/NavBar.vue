@@ -21,7 +21,7 @@
 
 			<div :class="{ 'is-active': showMobileNav }" id="navbarBasicExample" class="navbar-menu" ref="navbarMenuRef">
 				<div class="navbar-start">
-					<button @click="storeAuth.logoutUser()" class="button is-small is-info mt-3 ml-3">Log out</button>
+					<button v-if="storeAuth.user.id" @click="logout" class="button is-small is-info mt-3 ml-3">Log out {{ storeAuth.user.email }}</button>
 				</div>
 				<div class="navbar-end">
 					<RouterLink to="/" @click="showMobileNav = false" class="navbar-item" active-class="is-active">
@@ -57,6 +57,13 @@ const navbarMenuRef = ref(null)
 const navbarBurgerRef = ref(null)
 
 onClickOutside(navbarMenuRef, () => (showMobileNav.value = false), { ignore: [navbarBurgerRef] })
+
+// logout
+
+const logout = () => {
+	showMobileNav.value = false
+	storeAuth.logoutUser()
+}
 
 </script>
 
