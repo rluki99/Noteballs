@@ -1,30 +1,43 @@
 import { defineStore } from 'pinia'
 import { auth } from '@/js/firebase'
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from 'firebase/auth'
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged } from 'firebase/auth'
 
 export const useStoreAuth = defineStore('storeAuth', {
 	state: () => {
-		return {}
+		return {
+			user: {}
+		}
 	},
 	actions: {
+		init() {
+			onAuthStateChanged(auth, user => {
+				if (user) {
+					console.log('user logged in', user)
+					this.user.id = user.uid
+					this.user.email = user.email
+				} else {
+					this.user = {}
+				}
+			})
+		},
 		registerUser(credentials) {
 			createUserWithEmailAndPassword(auth, credentials.email, credentials.password)
-				.then((userCredential) => {
+				.then(userCredential => {
 					const user = userCredential.user
 					console.log('user: ', user)
 				})
-				.catch((error) => {
+				.catch(error => {
 					console.log('error.message: ', error.message)
 				})
 		},
 		loginUser(credentials) {
 			console.log('User logged in', credentials)
 			signInWithEmailAndPassword(auth, credentials.email, credentials.password)
-				.then((userCredential) => {
+				.then(userCredential => {
 					const user = userCredential.user
 					console.log('user: ', user)
 				})
-				.catch((error) => {
+				.catch(error => {
 					console.log('error.message: ', error.message)
 				})
 		},
@@ -33,7 +46,7 @@ export const useStoreAuth = defineStore('storeAuth', {
 				.then(() => {
 					console.log('User signed out')
 				})
-				.catch((error) => {
+				.catch(error => {
 					console.log('error.message: ', error.message)
 				})
 		},
