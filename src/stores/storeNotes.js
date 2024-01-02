@@ -1,9 +1,10 @@
 import { defineStore } from 'pinia'
 import { collection, onSnapshot, doc, addDoc, deleteDoc, updateDoc, query, orderBy } from 'firebase/firestore'
 import { db } from '@/js/firebase'
+import { useStoreAuth } from '@/stores/storeAuth'
 
-const notesCollectionRef = collection(db, 'users', 'hdr7ZWRHRjYfHB1iYiUunY1Dkfu1', 'notes')
-const notesCollectionQuery = query(notesCollectionRef, orderBy('date', 'desc'))
+let notesCollectionRef
+let notesCollectionQuery
 
 export const useStoreNotes = defineStore('storeNotes', {
 	state: () => {
@@ -23,11 +24,18 @@ export const useStoreNotes = defineStore('storeNotes', {
 		}
 	},
 	actions: {
+		init() {
+			const storeAuth = useStoreAuth()
+
+			notesCollectionRef = collection(db, 'users', storeAuth.user.id, 'notes')
+			notesCollectionQuery = query(notesCollectionRef, orderBy('date', 'desc'))
+			this.getNotes()
+		},
 		async getNotes() {
 			this.notesLoaded = false
-			onSnapshot(notesCollectionQuery, (querySnapshot) => {
+			onSnapshot(notesCollectionQuery, querySnapshot => {
 				const notes = []
-				querySnapshot.forEach((doc) => {
+				querySnapshot.forEach(doc => {
 					let note = {
 						id: doc.id,
 						content: doc.data().content,
@@ -35,7 +43,7 @@ export const useStoreNotes = defineStore('storeNotes', {
 					}
 					notes.push(note)
 				})
-				
+
 				this.notes = notes
 				this.notesLoaded = true
 			})
@@ -64,17 +72,17 @@ export const useStoreNotes = defineStore('storeNotes', {
 		},
 	},
 	getters: {
-		getNoteContent: (state) => {
-			return (id) => {
-				return state.notes.filter((note) => note.id === id)[0].content
+		getNoteContent: state => {
+			return id => {
+				return state.notes.filter(note => note.id === id)[0].content
 			}
 		},
-		getTotalNotesCount: (state) => {
+		getTotalNotesCount: state => {
 			return state.notes.length
 		},
-		getTotalCharactersCount: (state) => {
+		getTotalCharactersCount: state => {
 			let count = 0
-			state.notes.forEach((note) => {
+			state.notes.forEach(note => {
 				count += note.content.length
 			})
 			return count
