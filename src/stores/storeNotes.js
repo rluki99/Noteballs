@@ -2,7 +2,7 @@ import { defineStore } from 'pinia'
 import { collection, onSnapshot, doc, addDoc, deleteDoc, updateDoc, query, orderBy } from 'firebase/firestore'
 import { db } from '@/js/firebase'
 
-const notesCollectionRef = collection(db, 'notes')
+const notesCollectionRef = collection(db, 'users', 'hdr7ZWRHRjYfHB1iYiUunY1Dkfu1', 'notes')
 const notesCollectionQuery = query(notesCollectionRef, orderBy('date', 'desc'))
 
 export const useStoreNotes = defineStore('storeNotes', {
