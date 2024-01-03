@@ -6,7 +6,6 @@ Note Balls is a full-stack note-taking application built with Vue 3, utilizing t
 
 <img src="https://github.com/rluki99/Noteballs/assets/120097849/90a9e442-5802-4a6c-b566-dcefdcc5825d" width="300px" alt="obraz">
 
-
 ## Credentials for Demo
 
 For demo purposes, you can use the following credentials to log in:
